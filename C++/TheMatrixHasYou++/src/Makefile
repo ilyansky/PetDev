@@ -1,19 +1,21 @@
 FL = -Werror -Wextra -Wall -std=c++17
-TFL = -lgtest -lgtest_main -pthread
+LIBFL = -pthread
+TFL = -lgtest -lgtest_main
+
 LIB = s21_matrix_oop.a
-SRC_FILES = $(wildcard *.cpp) 
+SRC_FILES = $(wildcard *.cpp)
 HEADER_FILES = $(wildcard *.h)
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
 
 all: $(LIB)
 
-$(LIB): $(OBJ_FILES) 
+$(LIB): $(OBJ_FILES)
 	ar rcs $@ $^
 
 %.o: %.cpp
-	g++ $(FL) $(TFL) -c -o $@ $<
+	g++ $(FL) $(LIBFL) -c -o $@ $<
 
-test: 
+test:
 	g++ $(FL) $(TFL) $(SRC_FILES) -o testfile
 	./testfile
 
@@ -21,10 +23,10 @@ clang:
 	clang-format -i *.cpp
 	clang-format -i *.h
 
-clean: 
+clean:
 	rm -f *.a a.out *.o testfile
 
-leak: 
+leak:
 	make test
 	leaks -atExit -- ./testfile
 
